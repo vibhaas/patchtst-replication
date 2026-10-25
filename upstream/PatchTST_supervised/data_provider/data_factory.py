@@ -17,7 +17,8 @@ def data_provider(args, flag):
     if flag == 'test':
         shuffle_flag = False
         drop_last = True
-        batch_size = args.batch_size
+        # [replication] test all channels even when training used a channel subset
+        batch_size = getattr(args, 'test_batch_size', 0) or args.batch_size
         freq = args.freq
     elif flag == 'pred':
         shuffle_flag = False

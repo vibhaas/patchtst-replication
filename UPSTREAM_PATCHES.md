@@ -34,6 +34,8 @@ They have been restored from the pinned official commit; `pred_dataset.py` has t
 | `--max_minutes m` | stop training after m minutes, then test the best checkpoint |
 | `--epoch_test 0` | skip the test-set evaluation after every epoch (upstream does it only for logging) |
 | `--no_plots` | skip the PDF plots written during testing |
+| `--test_batch_size` | use a smaller test batch when a subset-channel model is applied to all channels |
+| `--stream_test_metrics` | calculate test MSE and MAE as batches arrive, avoiding large prediction arrays for Traffic |
 | `--results_csv`, `--run_tag` | append one row per run (metrics, epochs, stop reason, time) to a CSV |
 | `--force_cpu` | ignore the GPU |
 

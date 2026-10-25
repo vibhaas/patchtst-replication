@@ -257,6 +257,9 @@ class Exp_Main(Exp_Basic):
         preds = []
         trues = []
         inputx = []
+        # [replication] accumulate large test-set metrics without storing every forecast
+        stream_metrics = getattr(self.args, 'stream_test_metrics', False)
+        error_count = error_abs_sum = error_sq_sum = true_sum = true_sq_sum = 0.0
         folder_path = './test_results/' + setting + '/'
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
@@ -303,9 +306,17 @@ class Exp_Main(Exp_Basic):
                 pred = outputs  # outputs.detach().cpu().numpy()  # .squeeze()
                 true = batch_y  # batch_y.detach().cpu().numpy()  # .squeeze()
 
-                preds.append(pred)
-                trues.append(true)
-                inputx.append(batch_x.detach().cpu().numpy())
+                if stream_metrics:
+                    error = pred.astype(np.float64) - true.astype(np.float64)
+                    error_count += error.size
+                    error_abs_sum += np.abs(error).sum()
+                    error_sq_sum += np.square(error).sum()
+                    true_sum += true.sum(dtype=np.float64)
+                    true_sq_sum += np.square(true.astype(np.float64)).sum()
+                else:
+                    preds.append(pred)
+                    trues.append(true)
+                    inputx.append(batch_x.detach().cpu().numpy())
                 if i % 20 == 0 and not getattr(self.args, 'no_plots', False):
                     input = batch_x.detach().cpu().numpy()
                     gt = np.concatenate((input[0, :, -1], true[0, :, -1]), axis=0)
@@ -315,20 +326,26 @@ class Exp_Main(Exp_Basic):
         if self.args.test_flop:
             test_params_flop((batch_x.shape[1],batch_x.shape[2]))
             exit()
-        preds = np.array(preds)
-        trues = np.array(trues)
-        inputx = np.array(inputx)
+        if not stream_metrics:
+            preds = np.array(preds)
+            trues = np.array(trues)
+            inputx = np.array(inputx)
 
-        preds = preds.reshape(-1, preds.shape[-2], preds.shape[-1])
-        trues = trues.reshape(-1, trues.shape[-2], trues.shape[-1])
-        inputx = inputx.reshape(-1, inputx.shape[-2], inputx.shape[-1])
+            preds = preds.reshape(-1, preds.shape[-2], preds.shape[-1])
+            trues = trues.reshape(-1, trues.shape[-2], trues.shape[-1])
+            inputx = inputx.reshape(-1, inputx.shape[-2], inputx.shape[-1])
 
         # result save
         folder_path = './results/' + setting + '/'
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
 
-        mae, mse, rmse, mape, mspe, rse, corr = metric(preds, trues)
+        if stream_metrics:
+            mae = error_abs_sum / error_count
+            mse = error_sq_sum / error_count
+            rse = np.sqrt(error_sq_sum / (true_sq_sum - true_sum ** 2 / error_count))
+        else:
+            mae, mse, rmse, mape, mspe, rse, corr = metric(preds, trues)
         print('mse:{}, mae:{}, rse:{}'.format(mse, mae, rse))
         f = open("result.txt", 'a')
         f.write(setting + "  \n")
@@ -339,7 +356,8 @@ class Exp_Main(Exp_Basic):
         self._append_results_csv(setting, mse, mae)
 
         # np.save(folder_path + 'metrics.npy', np.array([mae, mse, rmse, mape, mspe,rse, corr]))
-        np.save(folder_path + 'pred.npy', preds)
+        if not stream_metrics:
+            np.save(folder_path + 'pred.npy', preds)
         # np.save(folder_path + 'true.npy', trues)
         # np.save(folder_path + 'x.npy', inputx)
         return

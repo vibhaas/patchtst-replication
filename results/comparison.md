@@ -63,6 +63,7 @@ Delta = (ours - paper) / paper on MSE. Negative means we did better. Notes list 
 | X | X/PatchTST42/weather/192 | 0.201 | 0.246 | 0.197 | 0.243 | +2.0% | training window stride 2; 20 ep, early_stop, 8.57 min |
 | X | X/PatchTST42/weather/720 | 0.320 | 0.335 | 0.320 | 0.335 | +0.1% | training window stride 2; 19 ep, early_stop, 8.21 min |
 | X | X/PatchTST42-full/electricity/96 | 0.137 | 0.234 | 0.130 | 0.222 | +5.0% | 11 ep, time_cap, 60.45 min |
+| X | X/PatchTST42-64ch/traffic/96 | 0.392 | 0.271 | 0.367 | 0.251 | +6.9% | trained on 64/862 channels; training window stride 2; 30 ep, max_epochs, 24.2 min |
 | F | F/ss-linprobe/ETTh1/96 | 0.368 | 0.397 | 0.371 | 0.400 | -0.9% | linear_probe |
 | F | F/ss-finetune/ETTh1/96 | 0.370 | 0.400 | 0.366 | 0.397 | +1.2% | finetune |
 | F | F/ss-linprobe/ETTh1/336 | 0.445 | 0.457 | 0.445 | 0.446 | +0.1% | linear_probe |

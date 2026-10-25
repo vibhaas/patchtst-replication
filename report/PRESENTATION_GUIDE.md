@@ -33,9 +33,9 @@ Point to the **Abstract** and **Problem Statement** in the report. Explain the w
 
 Say something like:
 
-> Here is the basic flow: past values go into 16-step patches. The patches go through one shared Transformer. Then it predicts future values. Each channel is handled separately, but the model weights are shared. We used the authors' code, with small fixes for current libraries. We tested four ETT datasets, Weather and Electricity.
+> Here is the basic flow: past values go into 16-step patches. The patches go through one shared Transformer. Then it predicts future values. Each channel is handled separately, but the model weights are shared. We used the authors' code, with small fixes for current libraries. We tested four ETT datasets, Weather, Electricity and Traffic.
 
-Point to the architecture line in the report. Mention ETT has 7 variables, Weather 21, and Electricity 321. The main look-back is 336 steps. Some training was shorter than in the paper because of our time limit. Do not say our settings are exactly the paper's settings.
+Point to the architecture line in the report. Mention ETT has 7 variables, Weather 21, Electricity 321, and Traffic 862. The main look-back is 336 steps. Some training was shorter than in the paper because of our time limit. Do not say our settings are exactly the paper's settings.
 
 ### Person 3: main results, about 1.5 minutes
 
@@ -53,7 +53,7 @@ Say something like:
 
 > We made one extra Electricity test. We trained PatchTST using only 32 of its 321 channels, but tested it on all 321. It got 0.145 MSE. Training on all channels gave 0.137. This shows the shared model can forecast channels that were not used in training. But the two runs also used different training windows and time, so we cannot say the whole difference is only from the number of channels.
 
-Mention the short masked pre-training result: linear probe on ETTh1/96 got **0.368 MSE**, close to the paper's **0.371**. End with: **the main ETT results came close to the paper, and our ablation gave the same overall trend.** Full Electricity needed a time cap, and the optional Traffic experiment was not run.
+Mention Traffic too: we trained on **64 of 862 channels** and tested on all 862. It got **0.392 MSE / 0.271 MAE**, compared with **0.367 / 0.251** in the paper's full-channel setup. Explain that this was a smaller training setup, so the gap is understandable but we cannot prove one reason for it. Mention the short masked pre-training result: linear probe on ETTh1/96 got **0.368 MSE**, close to the paper's **0.371**. End with: **the ETT results came close to the paper, and our ablation gave the same overall trend.**
 
 ## If someone asks a question
 

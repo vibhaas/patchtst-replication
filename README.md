@@ -2,7 +2,7 @@
 
 College project: replicating *A Time Series is Worth 64 Words: Long-term Forecasting with Transformers*
 (Nie et al., ICLR 2023, [arXiv:2211.14730](https://arxiv.org/abs/2211.14730)) with the authors' code, on a
-single 6 GB laptop GPU and a ~3 hour training budget.
+single RTX 5050 laptop GPU with 7.5 GiB memory and about 3.5 hours of training.
 
 ## Quick start
 

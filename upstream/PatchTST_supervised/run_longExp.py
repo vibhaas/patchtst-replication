@@ -100,6 +100,11 @@ if __name__ == '__main__':
     parser.add_argument('--max_minutes', type=float, default=0, help='stop training after this many minutes and test the best checkpoint (0 = no cap)')
     parser.add_argument('--epoch_test', type=int, default=1, help='1 = also evaluate on the test set after every epoch (upstream behaviour), 0 = skip')
     parser.add_argument('--no_plots', action='store_true', default=False, help='skip writing test_results/*.pdf plots')
+    parser.add_argument('--test_batch_size', type=int, default=0,
+                        help='override test batch size when all test channels do not fit in one training-size batch')
+    # [replication] keep large multivariate test sets within host memory
+    parser.add_argument('--stream_test_metrics', action='store_true', default=False,
+                        help='accumulate test errors without keeping all predictions in memory')
     parser.add_argument('--results_csv', type=str, default='', help='append one row with the final metrics to this CSV')
     parser.add_argument('--run_tag', type=str, default='', help='free-text label stored in --results_csv')
 
@@ -181,4 +186,4 @@ if __name__ == '__main__':
         print('>>>>>>>testing : {}<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<'.format(setting))
         exp.test(setting, test=1)
         torch.cuda.empty_cache()
-        
+

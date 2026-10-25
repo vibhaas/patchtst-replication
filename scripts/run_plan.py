@@ -147,7 +147,8 @@ def build_plans():
     extra.append(sup('X/PatchTST42-full/electricity/96', 'X', 'electricity', 96, est=60, cap=60, batch_size=16, use_amp=True,
                      paper=('table3', 'PatchTST/42', '')))
     extra.append(sup('X/PatchTST42-64ch/traffic/96', 'X', 'traffic', 96, est=40, cap=40, train_channels=64, batch_size=24,
-                     train_window_stride=2, use_amp=True, paper=('table3', 'PatchTST/42', '')))
+                     test_batch_size=1, stream_test_metrics=True, train_window_stride=2, use_amp=True,
+                     paper=('table3', 'PatchTST/42', '')))
     plans['extra'] = extra
     plans['all'] = main + extra
     return plans
