@@ -1,0 +1,5 @@
+time,run_tag,mode,data,pretrained_model,context_points,target_points,mse,mae,freeze_epochs,n_epochs_finetune
+2026-10-25 17:17:25,F/ss-linprobe/ETTh1/96,linear_probe,etth1,patchtst_pretrained_cw512_patch12_stride12_epochs-pretrain20_mask0.4_model1.pth,512,96,0.367779,0.396926,5,10
+2026-10-25 17:18:41,F/ss-finetune/ETTh1/96,finetune,etth1,patchtst_pretrained_cw512_patch12_stride12_epochs-pretrain20_mask0.4_model1.pth,512,96,0.370399,0.400057,5,10
+2026-10-25 17:19:14,F/ss-linprobe/ETTh1/336,linear_probe,etth1,patchtst_pretrained_cw512_patch12_stride12_epochs-pretrain20_mask0.4_model1.pth,512,336,0.445464,0.456528,5,10
+2026-10-25 17:20:29,F/ss-finetune/ETTh1/336,finetune,etth1,patchtst_pretrained_cw512_patch12_stride12_epochs-pretrain20_mask0.4_model1.pth,512,336,0.428033,0.439264,5,10

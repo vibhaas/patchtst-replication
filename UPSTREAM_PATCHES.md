@@ -5,6 +5,9 @@
 `PatchTST_supervised/Formers/` (the FEDformer/Pyraformer baselines) and the README images were left out.
 Every change is marked with a `# [replication]` comment.
 
+The four `PatchTST_self_supervised/src/data/` files were omitted from this repo's initial copy.
+They have been restored from the pinned official commit; `pred_dataset.py` has the pandas 3 fix below.
+
 ## Compatibility with current library versions
 
 | File | Change |

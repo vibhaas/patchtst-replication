@@ -87,7 +87,7 @@ def build_plans():
         sup('smoke/PatchTST/ETTh1/96', 'S', 'ETTh1', 96, est=1, cap=2, **q),
         sup('smoke/DLinear/ETTh1/96', 'S', 'ETTh1', 96, model='DLinear', est=1, cap=2, **q),
         sup('smoke/P-only/ETTh1/96', 'S', 'ETTh1', 96, model='PatchTST_CM', est=1, cap=2, **q),
-        sup('smoke/CI-only/ETTh1/96', 'S', 'ETTh1', 96, est=1, cap=2, patch_len=1, stride=1, **{**q, 'train_window_stride': 40}),
+        sup('smoke/CI-only/ETTh1/96', 'S', 'ETTh1', 96, est=1, cap=2, patch_len=1, stride=1, batch_size=4, **{**q, 'train_window_stride': 40}),
         sup('smoke/subset3/ETTh1/96', 'S', 'ETTh1', 96, est=1, cap=2, train_channels=3, **q),
         Run('smoke/ss-pretrain/ETTh1', 'S', 'pretrain', 'ETTh1', est_min=2, args=dict(n_epochs_pretrain=1)),
         Run('smoke/ss-linprobe/ETTh1/96', 'S', 'linear_probe', 'ETTh1', 96, est_min=1, args=dict(n_epochs_pretrain=1, n_epochs_finetune=1)),
@@ -104,11 +104,11 @@ def build_plans():
                             paper=('table3', 'DLinear', '')))
     # --- B: ablation, Table 7/10 (patching x channel-independence) on ETTh1 ------------------
     for h in [96, 336]:
-        main.append(sup(f'B/CI-only/ETTh1/{h}', 'B', 'ETTh1', h, est=5, cap=8, patch_len=1, stride=1,
+        main.append(sup(f'B/CI-only/ETTh1/{h}', 'B', 'ETTh1', h, est=5, cap=8, patch_len=1, stride=1, batch_size=4,
                         paper=('table10', 'CI', '')))
         main.append(sup(f'B/P-only/ETTh1/{h}', 'B', 'ETTh1', h, model='PatchTST_CM', est=2, cap=5,
                         paper=('table10', 'P', '')))
-        main.append(sup(f'B/Original/ETTh1/{h}', 'B', 'ETTh1', h, model='PatchTST_CM', est=4, cap=8, patch_len=1, stride=1,
+        main.append(sup(f'B/Original/ETTh1/{h}', 'B', 'ETTh1', h, model='PatchTST_CM', est=4, cap=8, patch_len=1, stride=1, batch_size=4,
                         paper=('table10', 'Original', '')))
     # --- C: look-back window, Figure 2 / Table 9, ETTh1 horizon 96 (L=336 comes from block A) --
     for L in [96, 192, 512, 720]:

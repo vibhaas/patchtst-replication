@@ -50,7 +50,7 @@ def main():
         if row.get('train_channels') and row.get('enc_in') and row['train_channels'] != row['enc_in']:
             notes.append(f"trained on {row['train_channels']}/{row['enc_in']} channels")
         if row.get('train_window_stride', '1') not in ('', '1'):
-            notes.append(f"every {row['train_window_stride']}th window")
+            notes.append(f"training window stride {row['train_window_stride']}")
         if row.get('epochs'):
             notes.append(f"{row['epochs']} ep, {row.get('stopped_by', '')}, {row.get('train_minutes', '?')} min")
         if row.get('mode'):

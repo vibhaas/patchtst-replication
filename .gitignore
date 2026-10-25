@@ -1,5 +1,5 @@
 # datasets (downloaded by scripts/download_data.py)
-data/
+/data/
 
 # training artefacts written by the upstream code
 upstream/PatchTST_supervised/checkpoints/
