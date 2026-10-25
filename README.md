@@ -4,8 +4,7 @@ College project: replicating *A Time Series is Worth 64 Words: Long-term Forecas
 (Nie et al., ICLR 2023, [arXiv:2211.14730](https://arxiv.org/abs/2211.14730)) with the authors' code, on a
 single 6 GB laptop GPU and a ~3 hour training budget.
 
-> **Agents / new machine:** read [`HANDOFF.md`](HANDOFF.md) first. It has the rules, install steps,
-> the run plan and what to do when finished.
+> Project setup, experiment plan and remaining work are in [`HANDOFF.md`](HANDOFF.md).
 
 ## Quick start
 

@@ -1,8 +1,8 @@
-# Handoff: PatchTST replication (for the agent on the RTX 5050 laptop)
+# PatchTST replication: project notes
 
-You are picking up a college project that is already set up. The code, scripts and plan are ready;
-**your job is to install, run the plan on the laptop GPU, compare against the paper, keep the
-implementation log up to date, and push the results back.** Read this whole file first.
+The project is set up for a college replication of PatchTST on the RTX 5050 laptop. The code, scripts
+and experiment plan are ready. Remaining work is to run the experiments, compare them with the paper,
+update the implementation log, and push the results.
 
 ## 0. Ground rules (read before any git/GitHub action)
 
@@ -60,7 +60,7 @@ days of GPU time. We accept small deviations and report them (section 6).
 | `scripts/compare.py` | writes `results/comparison.md`: our numbers next to the paper's |
 | `reference/paper_results.csv` | the paper's numbers (Tables 3, 9, 10, 12), extracted from the PDF |
 | `results/` | created by the runs: `supervised.csv`, `selfsup.csv`, `comparison.md`, `logs/` |
-| `IMPLEMENTATION_LOG.md` | the project log, written in the owner's voice; **you continue it** |
+| `IMPLEMENTATION_LOG.md` | the project log, kept in the owner's voice |
 
 ## 3. Install
 
@@ -82,11 +82,11 @@ pip install -r requirements.txt
 python scripts/check_env.py      # must end with "ENV OK" and show the RTX 5050
 ```
 
-The clone needs the `vibhaas` GitHub login on the laptop (the repo is private). If `git clone` asks
-for credentials, use `gh auth login` as `vibhaas`, or ask the owner.
+The clone requires the `vibhaas` GitHub login on the laptop. If `git clone` asks for credentials,
+use `gh auth login` as `vibhaas`.
 
-If `check_env.py` says CUDA is not available or "no kernels for sm_120": you have a CPU-only or too-old
-torch build. `pip uninstall torch` and reinstall from the `cu128` (or newer, e.g. `cu129`/`cu130`)
+If `check_env.py` says CUDA is not available or "no kernels for sm_120", the installed torch build is
+CPU-only or too old. `pip uninstall torch` and reinstall from the `cu128` (or newer, e.g. `cu129`/`cu130`)
 index above.
 
 ## 4. Run
@@ -153,7 +153,7 @@ variant is better, MSE falling with longer history) matter more than the exact d
   official repo does not include it.
 - Seed 2021 throughout, one run per setting (the paper also uses one seed for its main tables).
 
-## 7. When you're done
+## 7. After the runs
 
 1. `python scripts/compare.py` and read `results/comparison.md`.
 2. **Continue `IMPLEMENTATION_LOG.md`**: add entries for the runs (what ran, how long, what
@@ -163,4 +163,4 @@ variant is better, MSE falling with longer history) matter more than the exact d
 3. Commit `results/*.csv`, `results/comparison.md` and `IMPLEMENTATION_LOG.md` (not `results/logs/`,
    not `data/`), check the author (section 0) and push to `main`. Commit messages: short and plain,
    no AI trailers.
-4. Tell the owner the headline numbers and anything that went wrong.
+4. Record the headline numbers and any problems that affected the results.
