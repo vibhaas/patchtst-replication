@@ -9,7 +9,7 @@ already have a row are skipped, so the plan can be stopped and resumed at any po
     python scripts/run_plan.py --plan main             # the ~3 h plan (GPU)
     python scripts/run_plan.py --plan main --blocks A,B --budget-minutes 60
 
-See HANDOFF.md for what each block replicates.
+Block definitions below map the jobs to the paper tables and our extra checks.
 """
 import argparse
 import csv

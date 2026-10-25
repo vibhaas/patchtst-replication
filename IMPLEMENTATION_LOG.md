@@ -93,3 +93,34 @@ and shorter pre-training (20 epochs instead of 100).
   batch size and epochs, so their difference is not a controlled estimate of channel count alone.
 - I generated `results/comparison.md` from the recorded CSVs. It includes every completed main
   and extra result alongside the corresponding paper value and the run's deviations.
+
+## 2026-10-25: Model path notes
+
+I went back through the model code so the main steps are written down in one place. The forecast input is a rolling window with shape batch, past time steps, channels. The output has the same channels, but covers the future horizon. For example, the ETTh1 main run looks at 336 hourly points and predicts the next 96.
+
+### PatchTST forecast path
+
+- RevIN first normalizes each sample and each channel using that window's own statistics. It helps when one channel has a much larger scale than another. After the prediction, RevIN puts the output back on the original scale. The affine option was off in these runs.
+- The window is split into overlapping patches. We set patch length to 16 and stride to 8, so adjacent patches share half their values. The code pads the end of the window. With a 336-step look-back this makes 42 patches. This is the sequence the Transformer processes, instead of all 336 individual time points.
+- Each 16-value patch is projected to a feature vector, then given a position embedding. The position part lets the model know which patch came earlier or later. Three Transformer encoder layers use attention across the patches and update their features.
+- Channel independence happens in the tensor reshape: batch and channel are folded together, so each channel is passed through the same encoder as a separate series. There is no attention from one variable to another. The prediction head is also shared in our config (`individual=0`); it flattens the encoded patches and maps them to the requested forecast length. The result is reshaped to batch, future steps, channels, then denormalized.
+
+This sharing is why a model trained with 32 Electricity channels can still be applied to all 321 at test time. It is useful, but it does not by itself say the 32-channel run should score as well as training on every channel.
+
+The plan uses a smaller model for hourly ETTh1 and ETTh2: three encoder layers, four heads, model width 16 and feed-forward width 128. ETTm, Weather and Electricity use three layers, 16 heads, width 128 and feed-forward width 256. PatchTST batch size was lowered for memory on the larger Electricity runs. The implementation is in `upstream/PatchTST_supervised/models/PatchTST.py` and `upstream/PatchTST_supervised/layers/PatchTST_backbone.py`.
+
+### Baseline and ablation versions
+
+DLinear is a short baseline to compare against. It uses a moving average with kernel 25 to split the input into a smoother trend and a residual part. Two linear maps predict those parts into the future; the predictions are added together. It has no attention layers.
+
+The ablation runner changes one design choice at a time. CI-only uses patch length 1 and stride 1, so values are not grouped but each channel is still processed separately. P-only uses `PatchTST_CM`, our channel-mixing version: a time patch contains values from all channels and the Transformer can learn across them. The “Original” row uses that model with patch length 1, so it has neither patches nor channel independence. The mixing version was added for this project because the official code did not include it. So it is a useful check of the trend, though it is our implementation of the comparison.
+
+### How the runs were managed
+
+`scripts/run_plan.py` stores the jobs in priority order and starts them one at a time as subprocesses. Each job gets a stable tag. Results go into CSV rows and the logs go under `results/logs/`; completed tags are skipped on the next run, which made it possible to resume without repeating finished work. The runner stops starting jobs when the overall budget has passed. Inside a training job, Adam minimizes MSE, OneCycleLR changes the learning rate, validation loss controls early stopping, and a per-run time cap tests the best checkpoint reached so far.
+
+The loader uses the authors' chronological train, validation and test split and forms rolling windows. `train_window_stride` keeps every k-th training window to shorten training; it does not thin the validation or test sets. For the Electricity subset run, a seeded random set of channels is used for train and validation, while the test path uses every channel. Mixed precision was enabled on Weather and Electricity to fit the available memory and time.
+
+### Masked pre-training path
+
+The self-supervised experiment has its own upstream training scripts. It makes non-overlapping 12-value patches from a 512-step context and hides 40% of them. The encoder is trained to reconstruct the hidden patch values; the loss is measured only on masked patches. After pre-training, the linear probe freezes the encoder and trains a small forecast head. Fine-tuning first trains the head, then allows the full network to update. We used 20 pre-training epochs and shorter probe and fine-tuning schedules than the paper. The ETTh1/96 linear probe reached 0.368 MSE against 0.371 in the paper; that is close, but it is still one shortened run rather than a full reproduction of the paper's self-supervised study.
