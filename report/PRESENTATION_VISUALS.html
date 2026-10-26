@@ -40,6 +40,10 @@
     .legend .validation { color: #d47a25; }
     .epoch-chart { width: 100%; height: 390px; display: block; margin-top: 8px; }
     .chart-note { margin-top: 8px; color: #45546a; font-size: 18px; line-height: 1.35; }
+    .setup-table { table-layout: fixed; }
+    .setup-table th, .setup-table td { text-align: left !important; }
+    .setup-table td { height: 60px; padding: 10px 13px; font-size: 16px; line-height: 1.25; }
+    .setup-table td:first-child { font-size: 18px; }
     @media print {
       @page { size: 13.333in 7.5in; margin: 0; }
       body { background: #fff; }
@@ -201,6 +205,28 @@
     </svg>
     <div class="chart-note">Training reached <strong>30 epochs</strong>. The saved model scored <strong>0.145 test MSE</strong> and <strong>0.239 test MAE</strong>. Its schedule differed from the full-channel run.</div>
     <div class="source">The two lines are MSE losses on the training and validation splits, not test scores. Source: results/electricity_patchtst42_32ch_96_epoch_losses.csv.</div>
+  </section>
+
+  <section class="slide" aria-label="Dataset and training setup table">
+    <div class="eyebrow">PatchTST replication · Training setup</div>
+    <h1>Dataset and training setup</h1>
+    <p class="subtitle">PatchTST/42 · 336 past steps → 96 future steps · one row for each dataset</p>
+    <div class="table-wrap">
+      <table class="setup-table">
+        <colgroup><col style="width:14%"><col style="width:10%"><col style="width:12%"><col style="width:32%"><col style="width:32%"></colgroup>
+        <thead><tr><th>Data set</th><th>Variables</th><th>Frequency</th><th>Paper Training Setup</th><th>Our Training Setup</th></tr></thead>
+        <tbody>
+          <tr><td>ETTh1</td><td>7</td><td>1 hour</td><td>All 7 channels; every window<br>Batch 128; up to 100 epochs</td><td>All 7 channels; every window<br>Batch 128; 28 epochs</td></tr>
+          <tr><td>ETTh2</td><td>7</td><td>1 hour</td><td>All 7 channels; every window<br>Batch 128; up to 100 epochs</td><td>All 7 channels; every window<br>Batch 128; 17 epochs</td></tr>
+          <tr><td>ETTm1</td><td>7</td><td>15 min</td><td>All 7 channels; every window<br>Batch 128; up to 100 epochs</td><td>All 7 channels; every 2nd window<br>Batch 128; 17 epochs</td></tr>
+          <tr><td>ETTm2</td><td>7</td><td>15 min</td><td>All 7 channels; every window<br>Batch 128; up to 100 epochs</td><td>All 7 channels; every 2nd window<br>Batch 128; 13 epochs</td></tr>
+          <tr><td>Weather</td><td>21</td><td>10 min</td><td>All 21 channels; every window<br>Batch 128; up to 100 epochs</td><td>All 21 channels; every 2nd window<br>Batch 128; AMP; 21 epochs</td></tr>
+          <tr><td>Electricity</td><td>321</td><td>1 hour</td><td>All 321 channels; every window<br>Batch 32; up to 100 epochs</td><td>All 321 channels; every window<br>Batch 16; AMP; 11 epochs, time cap</td></tr>
+          <tr><td>Traffic</td><td>862</td><td>1 hour</td><td>All 862 channels; every window<br>Batch 24; up to 100 epochs</td><td>64 of 862 channels; every 2nd window<br>Batch 24; AMP; 30 epochs</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="source">Paper setup follows the authors' supervised scripts. Our epochs are the completed 96-step runs; AMP means mixed precision. Electricity also had a 32-channel training check.</div>
   </section>
 </body>
 </html>
