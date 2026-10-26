@@ -34,6 +34,12 @@
     .muted { color: #69778a; }
     .note { margin-top: 14px; color: #45546a; font-size: 17px; line-height: 1.35; }
     .note strong { color: #1c3c5f; }
+    .legend { display: flex; gap: 28px; margin-top: 22px; font-size: 18px; font-weight: 700; }
+    .legend span::before { content: ""; display: inline-block; width: 29px; height: 5px; margin: 0 9px 4px 0; border-radius: 3px; background: currentColor; }
+    .legend .train { color: #1765ad; }
+    .legend .validation { color: #d47a25; }
+    .epoch-chart { width: 100%; height: 390px; display: block; margin-top: 8px; }
+    .chart-note { margin-top: 8px; color: #45546a; font-size: 18px; line-height: 1.35; }
     @media print {
       @page { size: 13.333in 7.5in; margin: 0; }
       body { background: #fff; }
@@ -90,5 +96,40 @@
     <div class="note"><strong>Read each dataset row on its own.</strong> Electricity above is our full-channel result; training on 32 channels gave 0.145 MSE. Traffic trained on 64 of 862 channels and tested on all 862. The paper values use its own training setup; we did not run Traffic DLinear.</div>
     <div class="source">Sampling intervals are from the dataset CSV timestamps. Rounded results: results/comparison.md.</div>
   </section>
+
+  <section class="slide" aria-label="ETTh1 MSE loss over epochs">
+    <div class="eyebrow">PatchTST replication · Training curve</div>
+    <h1>ETTh1 MSE loss over 28 epochs</h1>
+    <p class="subtitle">PatchTST/42 · 336 past steps → 96 future steps · lower is better</p>
+    <div class="legend"><span class="train">Training loss</span><span class="validation">Validation loss</span></div>
+    <svg class="epoch-chart" viewBox="0 0 1200 390" role="img" aria-label="ETTh1 training MSE loss falls from 0.741 to 0.360, while validation MSE loss falls from 1.472 to 0.680 over 28 epochs">
+      <line x1="75" y1="338.0" x2="1180" y2="338.0" stroke="#dbe3ec"/>
+      <text x="60" y="344.0" text-anchor="end" fill="#5c6d83" font-size="17">0.0</text>
+      <line x1="75" y1="274.0" x2="1180" y2="274.0" stroke="#dbe3ec"/>
+      <text x="60" y="280.0" text-anchor="end" fill="#5c6d83" font-size="17">0.3</text>
+      <line x1="75" y1="210.0" x2="1180" y2="210.0" stroke="#dbe3ec"/>
+      <text x="60" y="216.0" text-anchor="end" fill="#5c6d83" font-size="17">0.6</text>
+      <line x1="75" y1="146.0" x2="1180" y2="146.0" stroke="#dbe3ec"/>
+      <text x="60" y="152.0" text-anchor="end" fill="#5c6d83" font-size="17">0.9</text>
+      <line x1="75" y1="82.0" x2="1180" y2="82.0" stroke="#dbe3ec"/>
+      <text x="60" y="88.0" text-anchor="end" fill="#5c6d83" font-size="17">1.2</text>
+      <line x1="75" y1="18.0" x2="1180" y2="18.0" stroke="#dbe3ec"/>
+      <text x="60" y="24.0" text-anchor="end" fill="#5c6d83" font-size="17">1.5</text>
+      <text x="75.0" y="367" text-anchor="middle" fill="#5c6d83" font-size="17">1</text>
+      <text x="238.7" y="367" text-anchor="middle" fill="#5c6d83" font-size="17">5</text>
+      <text x="443.3" y="367" text-anchor="middle" fill="#5c6d83" font-size="17">10</text>
+      <text x="648.0" y="367" text-anchor="middle" fill="#5c6d83" font-size="17">15</text>
+      <text x="852.6" y="367" text-anchor="middle" fill="#5c6d83" font-size="17">20</text>
+      <text x="1057.2" y="367" text-anchor="middle" fill="#5c6d83" font-size="17">25</text>
+      <text x="1180.0" y="367" text-anchor="middle" fill="#5c6d83" font-size="17">28</text>
+      <line x1="75" y1="338" x2="1180" y2="338" stroke="#8393a8" stroke-width="2"/>
+      <text x="627.5" y="387" text-anchor="middle" fill="#334861" font-size="18">Epoch</text>
+      <polyline points="75.0,180.0 115.9,215.6 156.9,240.4 197.8,248.2 238.7,252.4 279.6,254.8 320.6,256.3 361.5,257.3 402.4,258.1 443.3,258.5 484.3,259.1 525.2,259.3 566.1,259.7 607.0,259.9 648.0,260.1 688.9,260.2 729.8,260.4 770.7,260.5 811.7,260.6 852.6,260.8 893.5,260.8 934.4,260.9 975.4,261.0 1016.3,261.0 1057.2,261.2 1098.1,261.0 1139.1,261.2 1180.0,261.1" fill="none" stroke="#1765ad" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+      <polyline points="75.0,23.9 115.9,146.9 156.9,172.8 197.8,183.6 238.7,187.1 279.6,188.9 320.6,189.6 361.5,190.8 402.4,191.0 443.3,190.7 484.3,191.8 525.2,191.3 566.1,191.9 607.0,192.2 648.0,191.5 688.9,192.0 729.8,192.1 770.7,192.4 811.7,193.4 852.6,192.2 893.5,192.4 934.4,192.3 975.4,193.5 1016.3,193.1 1057.2,191.9 1098.1,191.8 1139.1,192.7 1180.0,192.9" fill="none" stroke="#d47a25" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"/>
+    </svg>
+    <div class="chart-note">Validation loss was lowest at <strong>epoch 23: 0.677</strong>. The final saved model scored <strong>0.376 test MSE</strong> and <strong>0.401 test MAE</strong>.</div>
+    <div class="source">The two lines are MSE losses on the training and validation splits, not test scores. Source: results/etth1_patchtst42_96_epoch_losses.csv.</div>
+  </section>
+
 </body>
 </html>
