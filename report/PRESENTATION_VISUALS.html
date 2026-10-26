@@ -44,6 +44,9 @@
     .setup-table th, .setup-table td { text-align: left !important; }
     .setup-table td { height: 60px; padding: 10px 13px; font-size: 16px; line-height: 1.25; }
     .setup-table td:first-child { font-size: 18px; }
+    .conclusion-lead { margin-top: 32px; padding: 21px 25px; border-left: 7px solid #1765ad; background: #eaf3fb; font-size: 25px; font-weight: 700; line-height: 1.32; }
+    .conclusion-list { margin: 29px 0 0; padding-left: 34px; display: grid; gap: 19px; font-size: 21px; line-height: 1.34; }
+    .conclusion-list li { padding-left: 5px; }
     @media print {
       @page { size: 13.333in 7.5in; margin: 0; }
       body { background: #fff; }
@@ -227,6 +230,20 @@
       </table>
     </div>
     <div class="source">Paper setup follows the authors' supervised scripts. Our epochs are the completed 96-step runs; AMP means mixed precision. Electricity also had a 32-channel training check.</div>
+  </section>
+
+  <section class="slide" aria-label="Project conclusions">
+    <div class="eyebrow">PatchTST replication · Conclusion</div>
+    <h1>What we conclude</h1>
+    <p class="subtitle">Our reading of the results, the ablation, and the training curves</p>
+    <div class="conclusion-lead">We think we reproduced the paper's main pattern, though this was not a complete reproduction of every experiment.</div>
+    <ul class="conclusion-list">
+      <li>Our results on the smaller datasets and Weather stayed close to the published results. This suggests our model and evaluation followed the intended method.</li>
+      <li>Removing patching or channel independence made forecasts worse in our ablation. That supports the paper's explanation for why PatchTST works.</li>
+      <li>The training curves show that the models learned and then improved more slowly. They do not suggest that the runs simply failed to train.</li>
+      <li>The larger datasets were harder on our laptop. We shortened training and changed parts of the setup, so we cannot treat every remaining gap as a problem with the model itself.</li>
+      <li>Overall, we would call this a successful check of the central idea. Matching every published result would need longer, more controlled runs.</li>
+    </ul>
   </section>
 </body>
 </html>
