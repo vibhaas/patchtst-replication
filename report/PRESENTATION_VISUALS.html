@@ -44,6 +44,10 @@
     .setup-table th, .setup-table td { text-align: left !important; }
     .setup-table td { height: 60px; padding: 10px 13px; font-size: 16px; line-height: 1.25; }
     .setup-table td:first-child { font-size: 18px; }
+    .feature-table { table-layout: fixed; }
+    .feature-table th, .feature-table td { text-align: left !important; }
+    .feature-table td { height: auto; padding: 19px 16px; font-size: 18px; line-height: 1.36; }
+    .feature-table td:first-child { font-size: 20px; }
     .conclusion-lead { margin-top: 32px; padding: 21px 25px; border-left: 7px solid #1765ad; background: #eaf3fb; font-size: 25px; font-weight: 700; line-height: 1.32; }
     .conclusion-list { margin: 29px 0 0; padding-left: 34px; display: grid; gap: 19px; font-size: 21px; line-height: 1.34; }
     .conclusion-list li { padding-left: 5px; }
@@ -216,6 +220,25 @@
     </svg>
     <div class="chart-note">Training reached <strong>30 epochs</strong>. The saved model scored <strong>0.145 test MSE</strong> and <strong>0.239 test MAE</strong>. Its schedule differed from the full-channel run.</div>
     <div class="source">The two lines are MSE losses on the training and validation splits, not test scores. Source: results/electricity_patchtst42_32ch_96_epoch_losses.csv.</div>
+  </section>
+
+  <section class="slide" aria-label="Dataset feature columns used">
+    <div class="eyebrow">PatchTST replication · Input features</div>
+    <h1>Which features did we use?</h1>
+    <p class="subtitle">The supervised model used every measured column unless a training-channel subset is noted</p>
+    <div class="table-wrap">
+      <table class="feature-table">
+        <colgroup><col style="width:23%"><col style="width:48%"><col style="width:29%"></colgroup>
+        <thead><tr><th>Data set</th><th>Features used</th><th>Training and test</th></tr></thead>
+        <tbody>
+          <tr><td>ETTh1, ETTh2,<br>ETTm1, ETTm2</td><td>HUFL, HULL, MUFL, MULL, LUFL, LULL, OT<br><span class="muted">Six load measures and oil temperature</span></td><td>All 7 channels in training and test</td></tr>
+          <tr><td>Weather</td><td>p, T, Tpot, Tdew, rh, VPmax, VPact, VPdef, sh, H2OC, rho, wv, max. wv, wd, rain, raining, SWDR, PAR, max. PAR, Tlog, OT</td><td>All 21 channels in training and test</td></tr>
+          <tr><td>Electricity</td><td>Columns 0–319 and OT</td><td>Full model: all 321. Subset check: 32 in training, all 321 in test.</td></tr>
+          <tr><td>Traffic</td><td>Columns 0–860 and OT</td><td>64 in training; all 862 in test.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="source">The date column is a timestamp, not a forecast channel. Feature names follow the CSV headers; all supervised runs used multivariate mode.</div>
   </section>
 
   <section class="slide" aria-label="Dataset and training setup table">
