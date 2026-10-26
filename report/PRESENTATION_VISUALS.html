@@ -47,6 +47,14 @@
     .conclusion-lead { margin-top: 32px; padding: 21px 25px; border-left: 7px solid #1765ad; background: #eaf3fb; font-size: 25px; font-weight: 700; line-height: 1.32; }
     .conclusion-list { margin: 29px 0 0; padding-left: 34px; display: grid; gap: 19px; font-size: 21px; line-height: 1.34; }
     .conclusion-list li { padding-left: 5px; }
+    .arch-flow { display: flex; align-items: center; gap: 9px; margin-top: 54px; }
+    .arch-step { flex: 1; min-width: 0; height: 202px; padding: 19px 12px; border: 2px solid #d5e1ed; border-radius: 13px; background: #f8fbfe; display: flex; flex-direction: column; justify-content: center; text-align: center; }
+    .arch-step strong { display: block; margin-bottom: 12px; color: #21496f; font-size: 20px; line-height: 1.2; }
+    .arch-step span { color: #465b73; font-size: 16px; line-height: 1.3; }
+    .arch-step.key { background: #eaf3fb; border-color: #87b4db; }
+    .arch-arrow { flex: none; color: #1765ad; font-size: 29px; font-weight: 700; }
+    .arch-callout { margin-top: 48px; padding: 23px 27px; border-left: 7px solid #1765ad; background: #eaf3fb; font-size: 22px; line-height: 1.42; }
+    .arch-small { margin-top: 23px; color: #52627b; font-size: 18px; line-height: 1.4; }
     @media print {
       @page { size: 13.333in 7.5in; margin: 0; }
       body { background: #fff; }
@@ -230,6 +238,27 @@
       </table>
     </div>
     <div class="source">Paper setup follows the authors' supervised scripts. Our epochs are the completed 96-step runs; AMP means mixed precision. Electricity also had a 32-channel training check.</div>
+  </section>
+
+  <section class="slide" aria-label="PatchTST architecture diagram">
+    <div class="eyebrow">PatchTST replication · Architecture</div>
+    <h1>How PatchTST makes a forecast</h1>
+    <p class="subtitle">The supervised model path used in our experiments</p>
+    <div class="arch-flow" role="img" aria-label="Past values go through channel-wise RevIN normalization, overlapping patches, patch embedding and position, a shared Transformer encoder, then a forecast head and inverse RevIN to produce future values.">
+      <div class="arch-step"><strong>Past values</strong><span>A window of readings from several variables</span></div>
+      <div class="arch-arrow" aria-hidden="true">→</div>
+      <div class="arch-step"><strong>Normalize</strong><span>RevIN adjusts each channel using its own window</span></div>
+      <div class="arch-arrow" aria-hidden="true">→</div>
+      <div class="arch-step"><strong>Make patches</strong><span>Overlapping groups of nearby values become tokens</span></div>
+      <div class="arch-arrow" aria-hidden="true">→</div>
+      <div class="arch-step"><strong>Embed patches</strong><span>Project each patch and add its position</span></div>
+      <div class="arch-arrow" aria-hidden="true">→</div>
+      <div class="arch-step key"><strong>Shared Transformer</strong><span>Attention compares patches within each channel</span></div>
+      <div class="arch-arrow" aria-hidden="true">→</div>
+      <div class="arch-step"><strong>Predict future</strong><span>A shared head forecasts; inverse RevIN restores the scale</span></div>
+    </div>
+    <div class="arch-callout"><strong>Channel independence:</strong> each variable follows this path separately. The encoder and forecast head reuse the same learned weights for every variable.</div>
+    <p class="arch-small">Our patches contain 16 values and move forward by 8 values each time. The forecast head maps the encoded patches to the requested future horizon.</p>
   </section>
 
   <section class="slide" aria-label="Project conclusions">
