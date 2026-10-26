@@ -225,20 +225,20 @@
   <section class="slide" aria-label="Dataset feature columns used">
     <div class="eyebrow">PatchTST replication · Input features</div>
     <h1>Which features did we use?</h1>
-    <p class="subtitle">The supervised model used every measured column unless a training-channel subset is noted</p>
+    <p class="subtitle">A few example feature names from each dataset; the model used the channels noted on the right</p>
     <div class="table-wrap">
       <table class="feature-table">
         <colgroup><col style="width:23%"><col style="width:48%"><col style="width:29%"></colgroup>
-        <thead><tr><th>Data set</th><th>Features used</th><th>Training and test</th></tr></thead>
+        <thead><tr><th>Data set</th><th>Example feature names</th><th>Training and test</th></tr></thead>
         <tbody>
-          <tr><td>ETTh1, ETTh2,<br>ETTm1, ETTm2</td><td>HUFL, HULL, MUFL, MULL, LUFL, LULL, OT<br><span class="muted">Six load measures and oil temperature</span></td><td>All 7 channels in training and test</td></tr>
-          <tr><td>Weather</td><td>p, T, Tpot, Tdew, rh, VPmax, VPact, VPdef, sh, H2OC, rho, wv, max. wv, wd, rain, raining, SWDR, PAR, max. PAR, Tlog, OT</td><td>All 21 channels in training and test</td></tr>
-          <tr><td>Electricity</td><td>Columns 0–319 and OT</td><td>Full model: all 321. Subset check: 32 in training, all 321 in test.</td></tr>
-          <tr><td>Traffic</td><td>Columns 0–860 and OT</td><td>64 in training; all 862 in test.</td></tr>
+          <tr><td>ETTh1, ETTh2,<br>ETTm1, ETTm2</td><td>HUFL, HULL, MUFL, OT<br><span class="muted">Load measures and oil temperature</span></td><td>All 7 channels in training and test</td></tr>
+          <tr><td>Weather</td><td>p (pressure), T (temperature), rh (humidity), wv (wind speed), rain</td><td>All 21 channels in training and test</td></tr>
+          <tr><td>Electricity</td><td>0, 1, 2, …, OT<br><span class="muted">The CSV uses mostly numbered column names</span></td><td>Full model: all 321. Subset check: 32 in training, all 321 in test.</td></tr>
+          <tr><td>Traffic</td><td>0, 1, 2, …, OT<br><span class="muted">The CSV uses mostly numbered column names</span></td><td>64 in training; all 862 in test.</td></tr>
         </tbody>
       </table>
     </div>
-    <div class="source">The date column is a timestamp, not a forecast channel. Feature names follow the CSV headers; all supervised runs used multivariate mode.</div>
+    <div class="source">Names are examples, not the full column list. The date column is a timestamp, not a forecast channel. All supervised runs used multivariate mode.</div>
   </section>
 
   <section class="slide" aria-label="Dataset and training setup table">
